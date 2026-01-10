@@ -11,7 +11,7 @@ const { OrdersModel } = require("./model/OrdersModel");
 const authRoutes = require("./schemas/auth");
 
 const PORT = process.env.PORT || 3002;
-const URL = process.env.MONGO_URL;
+const URL = process.env.MONGO_URI;
 
 const app = express();
 
@@ -209,8 +209,15 @@ app.post("/newOrder", async (req, res) => {
   res.send("Order saved!");
 });
 
-app.listen(PORT, () => {
-  console.group("App started");
-  mongoose.connect(URL);
-  console.log("DB connected");
-});
+mongoose
+  .connect(URL)
+  .then(() => {
+    console.log("DB connected");
+
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("DB connection failed ❌", err);
+  });
