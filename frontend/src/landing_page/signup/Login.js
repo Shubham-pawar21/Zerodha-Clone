@@ -14,11 +14,14 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:3002/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+    const res = await fetch(
+      `${process.env.REACT_APP_BACKEND_URL}/api/auth/login`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      }
+    );
 
     const data = await res.json();
 
@@ -26,7 +29,7 @@ function Login() {
       localStorage.setItem("token", data.token);
       alert("Login successful");
 
-      window.location.href = `http://localhost:3001?token=${data.token}`;
+      window.location.href = `${process.env.REACT_APP_DASHBOARD_URL}?token=${data.token}`;
     } else {
       alert(data.message);
     }
